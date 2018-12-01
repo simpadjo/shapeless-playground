@@ -38,13 +38,13 @@ object Split {
     override def split(list: List[CNil]): HNil = HNil
   }
 
-  implicit def cPllusSplitter[H, T <: Coproduct, R <: HList](implicit ev: Aux[T, R]): Aux[H :+: T, List[H] :: ev.R] = new Splitter[H :+: T] {
-    type R = List[H] :: ev.R
+  implicit def cPlusSplitter[H, T <: Coproduct, R1 <: HList](implicit ev: Aux[T, R1]): Aux[H :+: T, List[H] :: R1] = new Splitter[H :+: T] {
+    type R = List[H] :: R1
 
     override def split(list: List[H :+: T]): ::[List[H], ev.R] = {
       val heads: List[H] = list.flatMap(e => e.eliminate(h => Some(h), t => None))
       val tails: List[T] = list.flatMap(e => e.eliminate(h => None, t => Some(t)))
-      val sub: ev.R = ev.split(tails)
+      val sub: R1 = ev.split(tails)
       heads :: sub
     }
   }
