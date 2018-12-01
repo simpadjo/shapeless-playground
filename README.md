@@ -1,2 +1,2 @@
-# shameless
+# Experiments with shapeless
 
