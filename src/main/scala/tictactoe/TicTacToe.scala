@@ -11,6 +11,11 @@ import tictactoe.Players._
 import tictactoe.RowOutcome.{IsEmpty, IsNotP1, MovesOutcome, RowOutcome}
 import tictactoe.Turn.NextTurn
 
+/*
+Tonny Moris's Tick-Tac-Toe challenge
+https://github.com/data61/fp-course/blob/master/projects/TicTacToe/TicTacToe.markdown
+ */
+
 object Players {
 
   sealed trait MaybePlayer
@@ -59,7 +64,7 @@ object Cells {
 
   object SE extends Cell
 
-  type  ALL = (NW.type :: N.type :: NE.type :: HNil) :: (W.type :: C.type :: E.type :: HNil) :: (SW.type :: S.type :: SE.type :: HNil) ::
+  type  ALL_ROWS_TO_CHECK = (NW.type :: N.type :: NE.type :: HNil) :: (W.type :: C.type :: E.type :: HNil) :: (SW.type :: S.type :: SE.type :: HNil) ::
     (NW.type :: W.type :: SW.type :: HNil) :: (N.type :: C.type :: S.type :: HNil) :: (NE.type :: E.type :: SE.type :: HNil) ::
     (NW.type :: C.type :: SE.type :: HNil) :: (NE.type :: C.type :: SW.type :: HNil) :: HNil
 
@@ -207,7 +212,7 @@ object TicTacToe {
     type Moves = C :: b.Moves
   }
 
-  def move[B <: Board, M <: HList, C <: Cell](board: Aux[B, M], cell: C)(implicit canPlay: GameOutcome.Aux[M, Cells.ALL , InPlay.type ], isEmpty: PlayerAt.Aux[M, C, Empty.type]): WithMove[B, C] = {
+  def move[B <: Board, M <: HList, C <: Cell](board: Aux[B, M], cell: C)(implicit canPlay: GameOutcome.Aux[M, Cells.ALL_ROWS_TO_CHECK , InPlay.type ], isEmpty: PlayerAt.Aux[M, C, Empty.type]): WithMove[B, C] = {
     WithMove(board, cell)
   }
 }
@@ -224,32 +229,10 @@ object Runner extends App {
 
   val emptyBoard = EmptyBoard
   val b1 = move(emptyBoard, NW)
- // val b2 = move(b1, NW)
+  //val b2 = move(b1, NW) -- illegal, NW is already occupied, will not compile
   val b2 = move(b1, C)
   val b3 = move(b2, N)
   val b4 = move(b3, S)
   val b5 = move(b4, NE)
-  //val b6 = move(b5, SW)
-  // implicit val lft = lift[HNil,(C.type  :: HNil), (Empty.type  :: HNil), InPlay.type ]
-
-  //implicitly[Projection.Aux[C.type :: HNil,  (C.type  :: HNil), P1.type :: HNil]]
-  //implicitly[NextTurn[emptyBoard.Moves, P1.type ]]
-  // implicitly[MovesOutcome[HNil,  (C.type  :: HNil), InPlay.type ]]
-  //implicitly[GameOutcome.Aux[HNil,  (C.type  :: HNil):: HNil, InPlay.type ]]
-  //val b2 = move(b1, N)
-  //val b3 = move(b2, NE)
-  // val b3 = move(b2, NW)
-  //println(b1)
-
-  //val x = secondAfterFirst[NW.type , HNil]
-
-  //val t = implicitly[NextTurn[b1.Moves, P2.type] ]
-
-  //val z = implicitly[RowState.Aux[b2.Moves,  NW.type , N.type, NE.type ,InPlay.type ]]
-  //val z2 = implicitly[RowState.Aux[b2.Moves,  NW.type , N.type, NE.type ,Draw.type ]]
-
-  //val x = implicitly[RowState.Aux[b3.Moves, NW.type, N.type, NE.type, Draw.type]]
-  // println(x)
-
-  // val t = GameState.getState(b2)
+  //val b6 = move(b5, SW) -- illegal, the game is over, will not compile
 }
