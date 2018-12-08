@@ -155,9 +155,7 @@ object RowOutcome extends LP{
     type Out = O
   }
 
-  implicit def hasWinner1[ST <: HList](implicit winner: ForallF[IsP1, ST]): RowOutcome.Aux[ST, Winner[P1.type]] = null
-
-  implicit def hasWinner2[ST <: HList](implicit winner: ForallF[IsP1, ST]): RowOutcome.Aux[ST, Winner[P2.type]] = null
+  implicit def hasWinner[P <: Player, ST <: HList](implicit winner: ForallF[IsP1, ST]): RowOutcome.Aux[ST, Winner[P]] = null
 
   implicit def draw[ST <: HList](implicit p1: HasF[IsP1, ST], p2: HasF[IsP2, ST]): RowOutcome.Aux[ST, Draw.type] = null
 
